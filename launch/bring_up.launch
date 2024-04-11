@@ -1,10 +1,10 @@
 <launch>
 
-  <!-- <arg name="map_path" default="$(find sigverse_hsrb_navigation)/launch/map.yaml" />
+  <arg name="map_path" default="$(find sigverse_hsrb_nav)/map/map.yaml" />
   <arg name="use_map_topic" default="false" />
-  <arg name="use_map_server" default="true" /> -->
+  <arg name="use_map_server" default="true" />
   
-  <include file="$(find sigverse_hsrb_navigation)/launch/navigation.launch">
+  <include file="$(find sigverse_hsrb_nav)/launch/navigation.launch">
     <arg name="map_path" value="$(arg map_path)" />
     <arg name="use_map_topic" value="$(arg use_map_topic)" />
     <arg name="use_map_server" value="$(arg use_map_server)" />
@@ -13,6 +13,7 @@
   <include file="$(find sigverse_hsrb_camera)/launch/camera.launch" />
 
   <!-- <include file="$(find sigverse_hsrb_vision)/launch/erasersvisiondebug.launch" /> -->
-  <include file="$(find erasers_vision)/launch/erasersvision.launch" />
+  <!-- <include file="$(find erasers_vision)/launch/erasersvision.launch" /> -->
+  <include file="$(find sigverse_hsrb_utils)/launch/hsrb_display.launch" />
 
 </launch>
