@@ -3,6 +3,12 @@
   <arg name="map_path" default="$(find sigverse_hsrb_nav)/map/map.yaml" />
   <arg name="use_map_topic" default="false" />
   <arg name="use_map_server" default="true" />
+  <arg name="use_teleop" default="false" />
+  <arg name="debug" default="false" />
+  <arg name="use_rviz" default="false" />
+  <arg name="robot_name" default="hsrb4s" />
+  <arg name="upload_robot_model_launch" default="$(find hsrb_description)/robots/upload_hsrb.launch" />
+
   
   <include file="$(find sigverse_hsrb_nav)/launch/navigation.launch">
     <arg name="map_path" value="$(arg map_path)" />
@@ -10,10 +16,42 @@
     <arg name="use_map_server" value="$(arg use_map_server)" />
   </include>
 
-  <include file="$(find sigverse_hsrb_camera)/launch/camera.launch" />
+  <include file="$(find sigverse_hsrb_moveit_config)/launch/launch_moveit.launch">
+    <arg name="use_rviz" value="$(arg use_rviz)"/>
+  </include>
+
+  <!-- <include file="$(find sigverse_hsrb_camera)/launch/camera.launch" /> -->
+
+  <!-- <group if="$(arg use_teleop)">
+      <include file="$(find sigverse_hsrb_utils)/launch/teleop_key.launch" />
+  </group> -->
+
+  <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find hsrb_description)/robots/$(arg robot_name).urdf'" /> -->
+
+  <!-- <arg name="pipeline" default="ompl" />
+  <include file="$(find hsrb_moveit_config)/launch/$(arg pipeline)_planning_pipeline.launch.xml" /> -->
+
+  <!-- <include file="$(find hsrb_moveit_config)/launch/planning_context.launch">
+    <arg name="robot_name" value="$(arg robot_name)"/>
+    <arg name="upload_robot_model_launch" value="$(arg upload_robot_model_launch)"/>
+    <arg name="load_robot_description" value="false"/>
+  </include> -->
+
+  <!-- moveit groupの設定 -->
+  <!-- <include file="$(find hsrb_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="robot_name" value="$(arg robot_name)"/>
+    <arg name="upload_robot_model_launch" value="$(arg upload_robot_model_launch)"/>
+  </include> -->
+
+  <!-- <include file="$(find hsrb_moveit_config)/launch/moveit_rviz.launch" /> -->
+
 
   <!-- <include file="$(find sigverse_hsrb_vision)/launch/erasersvisiondebug.launch" /> -->
   <!-- <include file="$(find erasers_vision)/launch/erasersvision.launch" /> -->
-  <include file="$(find sigverse_hsrb_utils)/launch/hsrb_display.launch" />
+  <!-- <include file="$(find sigverse_hsrb_utils)/launch/hsrb_display.launch" /> -->
 
 </launch>
