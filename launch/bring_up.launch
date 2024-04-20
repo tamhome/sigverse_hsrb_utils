@@ -10,6 +10,16 @@
   <arg name="upload_robot_model_launch" default="$(find hsrb_description)/robots/upload_hsrb.launch" />
 
   
+  <node name="image_republish_rgb" pkg="image_transport" type="republish" args="raw compressed">
+    <remap from="in" to="/hsrb/head_rgbd_sensor/rgb/image_raw" />
+    <remap from="out" to="/hsrb/head_rgbd_sensor/rgb/image_compressed" />
+  </node>
+
+  <node name="image_republish_depth" pkg="image_transport" type="republish" args="raw compressedDepth">
+    <remap from="in" to="/hsrb/head_rgbd_sensor/depth_registered/image_raw" />
+    <remap from="out" to="/hsrb/head_rgbd_sensor/depth_registered/image_compressed" />
+  </node>
+
   <include file="$(find sigverse_hsrb_nav)/launch/navigation.launch">
     <arg name="map_path" value="$(arg map_path)" />
     <arg name="use_map_topic" value="$(arg use_map_topic)" />
