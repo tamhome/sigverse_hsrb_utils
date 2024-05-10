@@ -1,15 +1,29 @@
 <launch>
-
-  <arg name="map_path" default="$(find sigverse_hsrb_nav)/map/map.yaml" />
+  <arg name="map_path" default="$(find sigverse_hsrb_nav)/map/interactive_cleanup/Layout2019IC01.yaml" />
   <arg name="use_map_topic" default="false" />
   <arg name="use_map_server" default="true" />
   <arg name="use_teleop" default="false" />
   <arg name="debug" default="false" />
-  <arg name="use_rviz" default="false" />
+  <arg name="moveit_rviz" default="false" />
+  <arg name="bringup_rviz" default="false" />
   <arg name="robot_name" default="hsrb4s" />
   <arg name="upload_robot_model_launch" default="$(find hsrb_description)/robots/upload_hsrb.launch" />
 
-  
+	<arg name="sigverse_ros_bridge_port"   default="50001" />
+	<arg name="sync_time_num"              default="1" />
+	<arg name="ros_bridge_port"            default="9090" />
+	<arg name="use_ros_bridge"            default="false" />
+
+  <group if="$(arg use_ros_bridge)">
+    <group ns="sigverse_ros_bridge">
+      <node name="sigverse_ros_bridge" pkg="sigverse_ros_bridge" type="sigverse_ros_bridge" args="$(arg sigverse_ros_bridge_port) $(arg sync_time_num)"/>
+    </group>
+    
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" > 
+      <arg name="port" value="$(arg ros_bridge_port)"/>
+    </include>
+  </group>
+
   <node name="image_republish_rgb" pkg="image_transport" type="republish" args="raw compressed">
     <remap from="in" to="/hsrb/head_rgbd_sensor/rgb/image_raw" />
     <remap from="out" to="/hsrb/head_rgbd_sensor/rgb/image_compressed" />
@@ -27,8 +41,12 @@
   </include>
 
   <include file="$(find sigverse_hsrb_moveit_config)/launch/launch_moveit.launch">
-    <arg name="use_rviz" value="$(arg use_rviz)"/>
+    <arg name="use_rviz" value="$(arg moveit_rviz)"/>
   </include>
+
+  <group if="$(arg bringup_rviz)">
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find sigverse_hsrb_utils)/io/bring_up.rviz"/>
+  </group>
 
   <!-- <include file="$(find sigverse_hsrb_camera)/launch/camera.launch" /> -->
 
